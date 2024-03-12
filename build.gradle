@@ -6,10 +6,15 @@ repositories {
     mavenCentral()
 }
 
+var selenideVer = "7.2.1",
+    junitVer = "5.10.2",
+    slf4jVer = "1.7.32"
+
 dependencies {
     testImplementation(
-            "org.junit.jupiter:junit-jupiter:5.9.2",
-            "com.codeborne:selenide:6.19.1"
+            "org.junit.jupiter:junit-jupiter:$junitVer",
+            "com.codeborne:selenide:$selenideVer",
+            "org.slf4j:slf4j-simple:$slf4jVer"
     )
 }
 
