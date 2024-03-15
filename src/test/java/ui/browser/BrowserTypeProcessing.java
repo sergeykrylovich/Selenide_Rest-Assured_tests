@@ -1,13 +1,13 @@
 package ui.browser;
 
 import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.WebDriverRunner;
-import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -17,6 +17,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import ui.annotations.BrowserRunTypes;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class BrowserTypeProcessing implements BeforeAllCallback, BeforeEachCallb
 
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
-        context.getStore(space).put("browser", SystemProperties.getBrowser());
+        context.getStore(space).put("browser", SystemProperties.getBrowserProperty());
         context.getStore(space).put("isRemote", SystemProperties.getRemoteProperty());
     }
 
@@ -38,13 +39,15 @@ public class BrowserTypeProcessing implements BeforeAllCallback, BeforeEachCallb
             case CHROME -> {
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.setCapability("browserVersion", "122.0");
-                chromeOptions.addArguments("--start-maximized");
-                chromeOptions.addArguments("–disable-popup-blocking");
+                chromeOptions.addArguments("start-maximized");
+                chromeOptions.setExperimentalOption("excludeSwitches", Arrays.asList("disable-popup-blocking"));
                 return chromeOptions;
             }
             case FIREFOX -> {
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
                 firefoxOptions.setCapability("browserVersion", "117.0");
+                firefoxOptions.addArguments("--start-maximized");
+                firefoxOptions.addArguments("–disable-popup-blocking");
                 return firefoxOptions;
             }
             case EDGE -> {
@@ -73,25 +76,30 @@ public class BrowserTypeProcessing implements BeforeAllCallback, BeforeEachCallb
 
         if (methodAnnotation != null) {
             if (methodAnnotation.isRemote()) {
-                DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-                desiredCapabilities = setSelenoidCapabilities();
+                DesiredCapabilities desiredCapabilities = setSelenoidCapabilities();
                 desiredCapabilities.merge(getBrowserCapabilities(methodAnnotation.browser()));
                 RemoteWebDriver remoteWebDriver = new RemoteWebDriver(new URL(remoteUrl), desiredCapabilities);
                 remoteWebDriver.setFileDetector(new LocalFileDetector());
                 WebDriverRunner.setWebDriver(remoteWebDriver);
             } else {
                 SelenideConfig selenideConfig = new SelenideConfig().browser(methodAnnotation.browser().name().toLowerCase());
+                SelenideDriver driver = new SelenideDriver(selenideConfig);
+                WebDriverRunner.setWebDriver(driver.getAndCheckWebDriver());
+                WebDriverRunner.getWebDriver().manage().window().maximize();
             }
         } else {
             if (isRemote) {
-                DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-                desiredCapabilities = setSelenoidCapabilities();
+                DesiredCapabilities desiredCapabilities = setSelenoidCapabilities();
                 desiredCapabilities.merge(getBrowserCapabilities(browser));
                 RemoteWebDriver remoteWebDriver = new RemoteWebDriver(new URL(remoteUrl), desiredCapabilities);
                 remoteWebDriver.setFileDetector(new LocalFileDetector());
                 WebDriverRunner.setWebDriver(remoteWebDriver);
             } else {
                 SelenideConfig selenideConfig = new SelenideConfig().browser(browser.name().toLowerCase());
+                SelenideDriver driver = new SelenideDriver(selenideConfig);
+                WebDriverRunner.setWebDriver(driver.getAndCheckWebDriver());
+                WebDriverRunner.getWebDriver().manage().window().maximize();
+
             }
         }
     }

@@ -3,8 +3,6 @@ package ui.browser;
 import ui.annotations.BrowserRunTypes;
 import ui.annotations.BrowserRunTypes.Browsers;
 
-import java.util.Optional;
-
 public final class SystemProperties {
 
     //public static final Browser BROWSER = getBrowser();
@@ -17,8 +15,11 @@ public final class SystemProperties {
         return false;
     }
 
-    public static BrowserRunTypes.Browsers getBrowser() {
-        String propertyBrowser = Optional.of(System.getProperty("browser")).orElse("CHROME").toUpperCase();
+    public static BrowserRunTypes.Browsers getBrowserProperty() {
+        if (System.getProperty("browser") == null) {
+            return Browsers.CHROME;
+        }
+        String propertyBrowser = System.getProperty("browser").toUpperCase();
         switch (Browsers.valueOf(propertyBrowser)) {
             case CHROME -> {
                 return Browsers.CHROME;

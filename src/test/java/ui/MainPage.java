@@ -4,13 +4,13 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
-import static com.codeborne.selenide.Selenide.$x;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
 public class MainPage {
 
     private final SelenideElement logInBtn = $x("//a[contains(@class,'navbar__auth_login')]");
     private final SelenideElement imgProfile = $x("//img[@class='navbar__profile-img']");
+
 
     @Step("Open main page - stepik.org")
     public MainPage openMainPage() {
@@ -26,7 +26,7 @@ public class MainPage {
 
 
     public boolean imgProfileIsExist() {
-        return imgProfile.shouldBe().isDisplayed();
+        return imgProfile.shouldBe(Condition.visible).isDisplayed();
     }
 
 

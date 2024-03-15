@@ -32,7 +32,7 @@ tasks.register("testsWithTags", Test.class) {
     String fullTestsTags = System.getProperty("customTags")
     if(fullTestsTags != null) {
         useJUnitPlatform{
-            for (String tag : fullTestsTags) {
+            for (String tag : fullTestsTags.split(",")) {
                 includeTags.add(tag)
             }
         }
