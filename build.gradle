@@ -13,7 +13,8 @@ var selenideVer = "7.2.1",
     slf4jVer = "1.7.32",
     allureVer = "2.25.0",
     assertJVer = "3.23.1",
-    restAssuredVer= "5.4.0"
+    restAssuredVer= "5.4.0",
+    jacksonVer = "2.16.2"
 
 dependencies {
     testImplementation(
@@ -22,6 +23,7 @@ dependencies {
             "org.slf4j:slf4j-simple:$slf4jVer",
             "io.qameta.allure:allure-selenide:$allureVer",
             "io.rest-assured:rest-assured:$restAssuredVer",
+            "com.fasterxml.jackson.core:jackson-databind:$jacksonVer"
     )
 
     implementation "org.assertj:assertj-core:$assertJVer"

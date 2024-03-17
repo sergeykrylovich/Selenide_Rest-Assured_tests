@@ -1,7 +1,9 @@
 package tests;
 
 import api.AuthService;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -48,9 +50,10 @@ public class AuthorizationTests {
         AuthService authService = new AuthService();
         mainPage.openMainPage();
         Set<Cookie> cookies = WebDriverRunner.getWebDriver().manage().getCookies();
-        Map<String, String> responseCookies = authService.getCSRFToken(cookies);
+        Map<String, String> responseCookies = authService.getAuthTokens(cookies);
+        mainPage.setCookies(responseCookies);
+        Selenide.refresh();
 
-
-
+        assertThat(mainPage.imgProfileIsExist()).isTrue();
     }
 }

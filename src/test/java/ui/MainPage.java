@@ -2,7 +2,11 @@ package ui;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import io.qameta.allure.Step;
+import org.openqa.selenium.Cookie;
+
+import java.util.Map;
 
 import static com.codeborne.selenide.Selenide.*;
 
@@ -32,6 +36,14 @@ public class MainPage {
 
     public boolean imgProfileIsExist() {
         return imgProfile.shouldBe(Condition.visible).isDisplayed();
+    }
+
+    public void setCookies(Map<String, String> cookies) {
+        int i = 0;
+        for (Map.Entry<String, String> cookie : cookies.entrySet()) {
+            Cookie tempCookie = new Cookie(cookie.getKey(), cookie.getValue(), "stepik.org", "/", null);
+            WebDriverRunner.getWebDriver().manage().addCookie(tempCookie);
+        }
     }
 
 
