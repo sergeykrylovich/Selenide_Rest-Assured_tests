@@ -21,6 +21,6 @@ public @interface BrowserRunTypes {
     boolean isRemote() default false;
 
     enum Browsers {
-        CHROME, FIREFOX, EDGE, OPERA
+        CHROME, FIREFOX, EDGE
     }
 }

@@ -1,20 +1,17 @@
 package tests;
 
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideConfig;
-import org.assertj.core.api.Assertions;
+import api.AuthService;
+import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.parallel.Execution;
+import org.openqa.selenium.Cookie;
 import ui.MainPage;
 import ui.annotations.BrowserRunTypes;
-import ui.browser.BrowserTypeProcessing;
-import ui.browser.SystemProperties;
 
-import static com.codeborne.selenide.Selenide.$x;
+import java.util.Map;
+import java.util.Set;
+
 import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.*;
 
@@ -22,9 +19,9 @@ import static org.assertj.core.api.Assertions.*;
 @BrowserRunTypes
 public class AuthorizationTests {
 
-    MainPage mainPage;
-    private static final String email = "dantist4444@mail.ru";
-    private static final String password = "Sergey1855796";
+    protected MainPage mainPage;
+    public static final String EMAIL = "gann.semmi@mail.ru";
+    public static final String PASSWORD = "S12345678";
 
     @BrowserRunTypes(browser = BrowserRunTypes.Browsers.CHROME, isRemote = false)
     @Test
@@ -35,11 +32,25 @@ public class AuthorizationTests {
         mainPage = new MainPage();
         boolean isProfile = mainPage.openMainPage()
                 .clickOnLogIn()
-                .fillEmailAndPassword(email, password)
+                .fillEmailAndPassword(EMAIL, PASSWORD)
                 .submitCredentialsAndLogin()
                 .imgProfileIsExist();
 
         assertThat(isProfile).isTrue();
+
+    }
+    @BrowserRunTypes(browser = BrowserRunTypes.Browsers.CHROME, isRemote = false)
+    @Test
+    @Tag("UI")
+    @DisplayName("Authorization through api with login and password")
+    public void authThroughApiTest() {
+        mainPage = new MainPage();
+        AuthService authService = new AuthService();
+        mainPage.openMainPage();
+        Set<Cookie> cookies = WebDriverRunner.getWebDriver().manage().getCookies();
+        Map<String, String> responseCookies = authService.getCSRFToken(cookies);
+
+
 
     }
 }

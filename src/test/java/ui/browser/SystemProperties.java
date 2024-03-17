@@ -30,9 +30,6 @@ public final class SystemProperties {
             case EDGE -> {
                 return Browsers.EDGE;
             }
-            case OPERA -> {
-                return Browsers.OPERA;
-            }
         }
         return Browsers.CHROME;
     }
