@@ -3,11 +3,13 @@ package ui.browser;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.ex.SelenideErrorFormatter;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -23,7 +25,7 @@ import java.util.Map;
 
 import static ui.annotations.BrowserRunTypes.*;
 
-public class BrowserTypeProcessing implements BeforeAllCallback, BeforeEachCallback {
+public class BrowserTypeProcessing extends SelenideErrorFormatter implements BeforeAllCallback, BeforeEachCallback {
 
     private final ExtensionContext.Namespace space = ExtensionContext.Namespace.create(BrowserTypeProcessing.class);
     private final String remoteUrl = "http://localhost:4444/wd/hub";
@@ -32,6 +34,7 @@ public class BrowserTypeProcessing implements BeforeAllCallback, BeforeEachCallb
     public void beforeAll(ExtensionContext context) throws Exception {
         context.getStore(space).put("browser", SystemProperties.getBrowserProperty());
         context.getStore(space).put("isRemote", SystemProperties.getRemoteProperty());
+
     }
 
     private Capabilities getBrowserCapabilities(Browsers browser) {

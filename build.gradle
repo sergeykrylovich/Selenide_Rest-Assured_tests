@@ -8,6 +8,12 @@ repositories {
     mavenCentral()
 }
 
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
 var selenideVer = "7.2.1",
     junitVer = "5.10.2",
     slf4jVer = "1.7.32",

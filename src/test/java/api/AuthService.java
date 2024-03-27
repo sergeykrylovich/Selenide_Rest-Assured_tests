@@ -22,11 +22,11 @@ public class AuthService {
     public Map<String, String> getAuthTokens(Set<Cookie> seleniumCookie) {
 
         AuthorizationData authorizationData = new AuthorizationData(EMAIL, PASSWORD);
-        List<io.restassured.http.Cookie> restCookies = getRestCookiesBySeleniumCookies(seleniumCookie);
+        List<io.restassured.http.Cookie> restAssuredCookies = getRestAssuredCookiesBySeleniumCookies(seleniumCookie);
 
         Map<String, String> cookies = given()
                 .contentType("application/json; charset=UTF-8")
-                .cookies(new Cookies(restCookies))
+                .cookies(new Cookies(restAssuredCookies))
                 .header("Referer", REFERER)
                 .header("Origin", ORIGIN)
                 .header("authority", AUTHORITY)
@@ -41,7 +41,7 @@ public class AuthService {
         return cookies;
     }
 
-    private List<io.restassured.http.Cookie> getRestCookiesBySeleniumCookies(Set<Cookie> seleniumCookie) {
+    private List<io.restassured.http.Cookie> getRestAssuredCookiesBySeleniumCookies(Set<Cookie> seleniumCookie) {
         List<io.restassured.http.Cookie> raCookies = new ArrayList<>();
         for (Cookie cookie : seleniumCookie) {
             io.restassured.http.Cookie tempCookie = new io.restassured.http.Cookie

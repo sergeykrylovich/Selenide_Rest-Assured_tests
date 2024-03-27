@@ -25,7 +25,7 @@ public class AuthorizationTests {
     public static final String EMAIL = "gann.semmi@mail.ru";
     public static final String PASSWORD = "S12345678";
 
-    @BrowserRunTypes(browser = BrowserRunTypes.Browsers.CHROME, isRemote = false)
+    @BrowserRunTypes(browser = BrowserRunTypes.Browsers.CHROME, isRemote = true)
     @Test
     @Tag("UI")
     @DisplayName("Authorization with login and password")
@@ -41,18 +41,20 @@ public class AuthorizationTests {
         assertThat(isProfile).isTrue();
 
     }
-    @BrowserRunTypes(browser = BrowserRunTypes.Browsers.CHROME, isRemote = false)
+   // @BrowserRunTypes(browser = BrowserRunTypes.Browsers.CHROME, isRemote = false)
     @Test
-    @Tag("UI")
+    //@Tag("UI")
     @DisplayName("Authorization through api with login and password")
     public void authThroughApiTest() {
         mainPage = new MainPage();
-        AuthService authService = new AuthService();
-        mainPage.openMainPage();
-        Set<Cookie> cookies = WebDriverRunner.getWebDriver().manage().getCookies();
+        mainPage.openMainPage().authorizeThroughAPI();
+       /* Set<Cookie> cookies = WebDriverRunner.getWebDriver().manage().getCookies();
         Map<String, String> responseCookies = authService.getAuthTokens(cookies);
         mainPage.setCookies(responseCookies);
+        System.out.println(responseCookies);
         Selenide.refresh();
+        System.out.println(WebDriverRunner.getWebDriver().manage().getCookies());*/
+
 
         assertThat(mainPage.imgProfileIsExist()).isTrue();
     }
