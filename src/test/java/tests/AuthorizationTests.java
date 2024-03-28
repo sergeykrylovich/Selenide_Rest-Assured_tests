@@ -1,18 +1,10 @@
 package tests;
 
-import api.AuthService;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.WebDriverRunner;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.Cookie;
-import ui.MainPage;
+import ui.pages.MainPage;
 import ui.annotations.BrowserRunTypes;
-
-import java.util.Map;
-import java.util.Set;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.*;

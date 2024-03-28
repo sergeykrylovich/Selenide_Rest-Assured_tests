@@ -1,4 +1,4 @@
-package ui;
+package ui.pages;
 
 import api.AuthService;
 import com.codeborne.selenide.*;
@@ -84,9 +84,9 @@ public class MainPage {
     }
 
     @Step("Click on searching button")
-    public MainPage clickOnSearchingBtn() {
+    public SearchingPage clickOnSearchingBtn() {
         searchingBtn.click();
-        return this;
+        return new SearchingPage();
     }
 
 
