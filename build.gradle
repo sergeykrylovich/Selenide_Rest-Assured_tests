@@ -1,11 +1,23 @@
 plugins {
-    id "java"
-    id "io.qameta.allure" version "2.11.2"
-    id 'io.freefair.lombok' version "8.6"
+    id 'java'
+    id 'io.qameta.allure' version '2.11.2'
+    id 'io.freefair.lombok' version '8.6'
 }
 
 repositories {
     mavenCentral()
+}
+
+allure {
+    version.set("2.26.0")
+    adapter{
+        aspectjWeaver.set(true)
+        frameworks{
+            junit5{
+                adapterVersion.set("2.26.0")
+            }
+        }
+    }
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -23,16 +35,14 @@ var selenideVer = "7.2.1",
     jacksonVer = "2.16.2"
 
 dependencies {
-    testImplementation(
-            "org.junit.jupiter:junit-jupiter:$junitVer",
-            "com.codeborne:selenide:$selenideVer",
-            "org.slf4j:slf4j-simple:$slf4jVer",
-            "io.qameta.allure:allure-selenide:$allureVer",
-            "io.rest-assured:rest-assured:$restAssuredVer",
-            "com.fasterxml.jackson.core:jackson-databind:$jacksonVer"
-    )
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitVer")
+    testImplementation("com.codeborne:selenide:$selenideVer")
+    testImplementation("org.slf4j:slf4j-simple:$slf4jVer")
+    testImplementation("io.qameta.allure:allure-selenide:$allureVer")
+    testImplementation("io.rest-assured:rest-assured:$restAssuredVer")
+    testImplementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVer")
 
-    implementation "org.assertj:assertj-core:$assertJVer"
+    implementation ("org.assertj:assertj-core:$assertJVer")
 }
 
 test {

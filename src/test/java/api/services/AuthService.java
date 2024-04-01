@@ -1,4 +1,4 @@
-package api;
+package api.services;
 
 import api.pojo.AuthorizationData;
 import io.restassured.http.Cookies;

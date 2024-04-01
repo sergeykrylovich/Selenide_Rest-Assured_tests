@@ -1,6 +1,7 @@
 package ui.pages;
 
-import api.AuthService;
+
+import api.services.AuthService;
 import com.codeborne.selenide.*;
 import io.qameta.allure.Step;
 import org.openqa.selenium.Cookie;

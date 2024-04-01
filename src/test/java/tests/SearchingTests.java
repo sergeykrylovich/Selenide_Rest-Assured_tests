@@ -1,17 +1,12 @@
 package tests;
 
 import com.codeborne.selenide.*;
-import com.codeborne.selenide.collections.TextsInAnyOrder;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
-import org.assertj.core.api.Assertions;
-import org.assertj.core.internal.Conditions;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.*;
 import ui.pages.CoursePage;
 import ui.pages.MainPage;
 import ui.annotations.BrowserRunTypes;
-import ui.pages.SearchingPage;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,18 +14,17 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.*;
 import static ui.enums.Languages.*;
 
-@Epic("Test for searching content")
-@BrowserRunTypes(browser = BrowserRunTypes.Browsers.CHROME, isRemote = false)
+@Epic("Tests for searching content")
+//@BrowserRunTypes(browser = BrowserRunTypes.Browsers.CHROME, isRemote = false)
 public class SearchingTests {
 
 
     private MainPage mainPage;
 
-/*    @BeforeAll
+    @BeforeAll
     public static void setUp() {
-        MainPage authorizePage = new MainPage();
-        authorizePage.openMainPage().authorizeThroughAPI();
-    }*/
+        int i = 0;
+    }
 
     @BeforeEach
     public void setUpPage() {
@@ -70,11 +64,34 @@ public class SearchingTests {
                 .chooseWithCertificatesCheckBox()
                 .chooseFreeCursesCheckBox()
                 .clickOnSearchingBtn()
-                .clickOnFirstLinkOfSearchingResult();
+                .clickOnLinkByNumberInSearchingResult(1);
 
         Selenide.switchTo().window(1);
         SelenideElement headerName = coursePage.getHeaderName();
         assertThat(headerName.getText()).containsIgnoringCase(expectedSearchingQuery);
+    }
 
+
+    @BrowserRunTypes(browser = BrowserRunTypes.Browsers.CHROME)
+    @Test
+    @Tag("UI")
+    @Tag("test1")
+    @Feature("Searching content")
+    @DisplayName("Searching for not-existing course")
+    public void searchingForNonExistingCourseTest() {
+        String expectedSearchingQuery = "dfgfhwse4ywvsfghsdffbg";
+        CoursePage coursePage = new CoursePage();
+        String message = mainPage.openMainPage()
+                .inputSearchingData(expectedSearchingQuery)
+                .ChooseLanguage(ALL)
+                .clickOnSearchingBtn()
+                .getNotFoundCourseMessage();
+
+        assertThat(message).contains(expectedSearchingQuery).contains("ничего не найдено");
+    }
+
+    @AfterEach
+    public void cleanUp() {
+        WebDriverRunner.getWebDriver().quit();
     }
 }

@@ -6,6 +6,7 @@ import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.SelenideErrorFormatter;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
@@ -25,17 +26,17 @@ import java.util.Map;
 
 import static ui.annotations.BrowserRunTypes.*;
 
-public class BrowserTypeProcessing extends SelenideErrorFormatter implements BeforeAllCallback, BeforeEachCallback {
+public class BrowserTypeProcessing implements BeforeAllCallback, BeforeEachCallback {
 
     private final ExtensionContext.Namespace space = ExtensionContext.Namespace.create(BrowserTypeProcessing.class);
     private final String remoteUrl = "http://localhost:4444/wd/hub";
 
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
-        context.getStore(space).put("browser", SystemProperties.getBrowserProperty());
-        context.getStore(space).put("isRemote", SystemProperties.getRemoteProperty());
-
+        BrowserRunTypes classAnnotation = context.getRequiredTestClass().getAnnotation(BrowserRunTypes.class);
+        context.getStore(space).put("classAnnotation", classAnnotation);
     }
+
 
     private Capabilities getBrowserCapabilities(Browsers browser) {
         switch (browser) {
@@ -73,11 +74,14 @@ public class BrowserTypeProcessing extends SelenideErrorFormatter implements Bef
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
+        BrowserRunTypes classAnnotation = context.getStore(space).get("classAnnotation", BrowserRunTypes.class);
         BrowserRunTypes methodAnnotation = context.getRequiredTestMethod().getAnnotation(BrowserRunTypes.class);
-        Browsers browser = context.getStore(space).get("browser", Browsers.class);
-        Boolean isRemote = context.getStore(space).get("isRemote", Boolean.class);
 
-        if (methodAnnotation != null) {
+        if (methodAnnotation == null) {
+            methodAnnotation = classAnnotation;
+        }
+
+        if (methodAnnotation != null)
             if (methodAnnotation.isRemote()) {
                 DesiredCapabilities desiredCapabilities = setSelenoidCapabilities();
                 desiredCapabilities.merge(getBrowserCapabilities(methodAnnotation.browser()));
@@ -90,20 +94,7 @@ public class BrowserTypeProcessing extends SelenideErrorFormatter implements Bef
                 WebDriverRunner.setWebDriver(driver.getAndCheckWebDriver());
                 WebDriverRunner.getWebDriver().manage().window().maximize();
             }
-        } else {
-            if (isRemote) {
-                DesiredCapabilities desiredCapabilities = setSelenoidCapabilities();
-                desiredCapabilities.merge(getBrowserCapabilities(browser));
-                RemoteWebDriver remoteWebDriver = new RemoteWebDriver(new URL(remoteUrl), desiredCapabilities);
-                remoteWebDriver.setFileDetector(new LocalFileDetector());
-                WebDriverRunner.setWebDriver(remoteWebDriver);
-            } else {
-                SelenideConfig selenideConfig = new SelenideConfig().browser(browser.name().toLowerCase());
-                SelenideDriver driver = new SelenideDriver(selenideConfig);
-                WebDriverRunner.setWebDriver(driver.getAndCheckWebDriver());
-                WebDriverRunner.getWebDriver().manage().window().maximize();
-
-            }
-        }
     }
+
+
 }
