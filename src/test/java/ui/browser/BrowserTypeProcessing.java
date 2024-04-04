@@ -3,13 +3,12 @@ package ui.browser;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.WebDriverRunner;
-import com.codeborne.selenide.ex.SelenideErrorFormatter;
+import lombok.SneakyThrows;
+import org.apache.groovy.json.internal.Chr;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
-import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
@@ -29,7 +28,6 @@ import static ui.annotations.BrowserRunTypes.*;
 public class BrowserTypeProcessing implements BeforeAllCallback, BeforeEachCallback {
 
     private final ExtensionContext.Namespace space = ExtensionContext.Namespace.create(BrowserTypeProcessing.class);
-    private final String remoteUrl = "http://localhost:4444/wd/hub";
 
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
@@ -37,14 +35,13 @@ public class BrowserTypeProcessing implements BeforeAllCallback, BeforeEachCallb
         context.getStore(space).put("classAnnotation", classAnnotation);
     }
 
-
     private Capabilities getBrowserCapabilities(Browsers browser) {
         switch (browser) {
             case CHROME -> {
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.setCapability("browserVersion", "122.0");
-                chromeOptions.addArguments("start-maximized");
-                chromeOptions.setExperimentalOption("excludeSwitches", Arrays.asList("disable-popup-blocking"));
+                //chromeOptions.addArguments("start-maximized");
+                //chromeOptions.setExperimentalOption("excludeSwitches", Arrays.asList("disable-popup-blocking"));
                 return chromeOptions;
             }
             case FIREFOX -> {
@@ -63,13 +60,30 @@ public class BrowserTypeProcessing implements BeforeAllCallback, BeforeEachCallb
         }
     }
 
-    private DesiredCapabilities setSelenoidCapabilities() {
+    @SneakyThrows
+    private RemoteWebDriver createRemoteWebDriverForSelenoid(Browsers browser) {
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         Map<String, Object> selenoidOptions = new HashMap<>();
         selenoidOptions.put("enableVNC", true);
         selenoidOptions.put("enableVideo", true);
         desiredCapabilities.setCapability("selenoid:options", selenoidOptions);
-        return desiredCapabilities;
+        desiredCapabilities.merge(getBrowserCapabilities(browser));
+        RemoteWebDriver remoteWebDriver = new RemoteWebDriver(new URL(System.getenv("host")), desiredCapabilities);
+        remoteWebDriver.setFileDetector(new LocalFileDetector());
+        return remoteWebDriver;
+    }
+
+    private WebDriver createLocalDriver(Browsers browser) {
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--disable-dev-shm-usage");
+        chromeOptions.addArguments("--no-sandbox");
+        chromeOptions.addArguments("--headless");
+        SelenideConfig selenideConfig = new SelenideConfig()
+                .browser(browser.name().toLowerCase())
+                .browserCapabilities(chromeOptions);
+        SelenideDriver driver = new SelenideDriver(selenideConfig);
+        return driver.getAndCheckWebDriver();
+
     }
 
     @Override
@@ -83,18 +97,13 @@ public class BrowserTypeProcessing implements BeforeAllCallback, BeforeEachCallb
 
         if (methodAnnotation != null)
             if (methodAnnotation.isRemote()) {
-                DesiredCapabilities desiredCapabilities = setSelenoidCapabilities();
-                desiredCapabilities.merge(getBrowserCapabilities(methodAnnotation.browser()));
-                RemoteWebDriver remoteWebDriver = new RemoteWebDriver(new URL(remoteUrl), desiredCapabilities);
-                remoteWebDriver.setFileDetector(new LocalFileDetector());
+                RemoteWebDriver remoteWebDriver = createRemoteWebDriverForSelenoid(methodAnnotation.browser());
                 WebDriverRunner.setWebDriver(remoteWebDriver);
             } else {
-                SelenideConfig selenideConfig = new SelenideConfig().browser(methodAnnotation.browser().name().toLowerCase());
-                SelenideDriver driver = new SelenideDriver(selenideConfig);
-                WebDriverRunner.setWebDriver(driver.getAndCheckWebDriver());
-                WebDriverRunner.getWebDriver().manage().window().maximize();
+                WebDriver localWebDriver = createLocalDriver(methodAnnotation.browser());
+                WebDriverRunner.setWebDriver(localWebDriver);
+                //WebDriverRunner.getWebDriver().manage().window().maximize();
             }
     }
-
 
 }

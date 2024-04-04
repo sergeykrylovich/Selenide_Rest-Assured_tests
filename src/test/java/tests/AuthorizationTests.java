@@ -19,7 +19,7 @@ public class AuthorizationTests {
 
     @BrowserRunTypes(browser = BrowserRunTypes.Browsers.CHROME, isRemote = true)
     @Test
-    @Tag("UI")
+    @Tag("Auth")
     @DisplayName("Authorization with login and password")
     public void successfulTest() {
 

@@ -1,30 +1,37 @@
 package tests;
 
 import com.codeborne.selenide.*;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.selenide.AllureSelenide;
+import io.qameta.allure.selenide.LogType;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import ui.allure.AllureVideoExtension;
+import ui.annotations.AllureVideoAttach;
+import ui.annotations.SelenideListener;
 import ui.pages.CoursePage;
 import ui.pages.MainPage;
 import ui.annotations.BrowserRunTypes;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
+import static ui.annotations.BrowserRunTypes.Browsers.*;
 import static ui.enums.Languages.*;
 
+@SelenideListener
+@AllureVideoAttach
+@BrowserRunTypes(browser = CHROME, isRemote = false)
 @Epic("Tests for searching content")
 //@BrowserRunTypes(browser = BrowserRunTypes.Browsers.CHROME, isRemote = false)
 public class SearchingTests {
 
 
     private MainPage mainPage;
-
-    @BeforeAll
-    public static void setUp() {
-        int i = 0;
-    }
 
     @BeforeEach
     public void setUpPage() {
@@ -72,7 +79,7 @@ public class SearchingTests {
     }
 
 
-    @BrowserRunTypes(browser = BrowserRunTypes.Browsers.CHROME)
+
     @Test
     @Tag("UI")
     @Tag("test1")

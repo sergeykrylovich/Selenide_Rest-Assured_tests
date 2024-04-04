@@ -29,18 +29,21 @@ tasks.withType(JavaCompile) {
 var selenideVer = "7.2.1",
     junitVer = "5.10.2",
     slf4jVer = "1.7.32",
-    allureVer = "2.25.0",
+    allureVer = "2.26.0",
     assertJVer = "3.23.1",
     restAssuredVer= "5.4.0",
     jacksonVer = "2.16.2"
+
 
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVer")
     testImplementation("com.codeborne:selenide:$selenideVer")
     testImplementation("org.slf4j:slf4j-simple:$slf4jVer")
     testImplementation("io.qameta.allure:allure-selenide:$allureVer")
+    testImplementation ("io.qameta.allure:allure-junit5:2.26.0")
     testImplementation("io.rest-assured:rest-assured:$restAssuredVer")
     testImplementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVer")
+    testImplementation("commons-io:commons-io:2.15.1")
 
     implementation ("org.assertj:assertj-core:$assertJVer")
 }
@@ -50,7 +53,9 @@ test {
 }
 
 tasks.register("testsWithTags", Test.class) {
+    environment "host", System.getProperty("host")
     String fullTestsTags = System.getProperty("customTags")
+
     if(fullTestsTags != null) {
         useJUnitPlatform{
             for (String tag : fullTestsTags.split(",")) {
