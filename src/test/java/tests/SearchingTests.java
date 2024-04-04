@@ -25,7 +25,7 @@ import static ui.enums.Languages.*;
 
 @SelenideListener
 @AllureVideoAttach
-@BrowserRunTypes(browser = CHROME, isRemote = false)
+@BrowserRunTypes(browser = CHROME, isRemote = true)
 @Epic("Tests for searching content")
 //@BrowserRunTypes(browser = BrowserRunTypes.Browsers.CHROME, isRemote = false)
 public class SearchingTests {
