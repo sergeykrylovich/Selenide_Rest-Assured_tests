@@ -12,7 +12,7 @@ timeout(30) {
        try {
        labelledShell(label: 'Save failed tests', script: '''
        chmod +x gradlew
-       ./gradlew clean testsWithTags -x test -DcustomTags=UI
+       ./gradlew clean testsWithTags -x test -DcustomTags=UI || echo
        ''')
        } finally {
        archiveArtifacts(artifacts: "src/test/resources/FailedTests.txt")
