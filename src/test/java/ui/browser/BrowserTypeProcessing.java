@@ -65,7 +65,7 @@ public class BrowserTypeProcessing implements BeforeAllCallback, BeforeEachCallb
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         Map<String, Object> selenoidOptions = new HashMap<>();
         selenoidOptions.put("enableVNC", true);
-        selenoidOptions.put("enableVideo", true);
+        //selenoidOptions.put("enableVideo", true);
         desiredCapabilities.setCapability("selenoid:options", selenoidOptions);
         desiredCapabilities.merge(getBrowserCapabilities(browser));
         RemoteWebDriver remoteWebDriver = new RemoteWebDriver(new URL(System.getenv("host")), desiredCapabilities);
