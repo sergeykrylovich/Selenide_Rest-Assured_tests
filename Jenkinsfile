@@ -1,5 +1,5 @@
 timeout(30) {
-    node("windows-agent") {
+    node("built-in") {
        echo "Download project"
        checkout scm: [
                 $class: 'GitSCM',
