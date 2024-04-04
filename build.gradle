@@ -53,9 +53,8 @@ test {
 }
 
 tasks.register("testsWithTags", Test.class) {
-    environment "host", System.getProperty("host")
+    environment("host", System.getProperty("host"))
     String fullTestsTags = System.getProperty("customTags")
-
     if(fullTestsTags != null) {
         useJUnitPlatform{
             for (String tag : fullTestsTags.split(",")) {
