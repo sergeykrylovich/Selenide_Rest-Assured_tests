@@ -10,9 +10,11 @@ timeout(30) {
                          ]]
                 ]
        try {
-       sh 'echo hello'
-       sh 'chmod +x gradlew'
-       sh './gradlew clean testsWithTags -x test -DcustomTags=UI || echo'
+       labelledShell(label: 'Save failed tests', script: """
+       echo hello
+       chmod +x gradlew
+       ./gradlew clean testsWithTags -x test -DcustomTags=UI || echo
+        """)
        } finally {
        archiveArtifacts(artifacts: "src/test/resources/FailedTests.txt")
        allure([
