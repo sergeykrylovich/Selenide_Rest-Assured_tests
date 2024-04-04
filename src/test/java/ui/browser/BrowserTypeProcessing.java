@@ -39,7 +39,7 @@ public class BrowserTypeProcessing implements BeforeAllCallback, BeforeEachCallb
         switch (browser) {
             case CHROME -> {
                 ChromeOptions chromeOptions = new ChromeOptions();
-                chromeOptions.setCapability("browserVersion", "122.0");
+                chromeOptions.setCapability("browserVersion", "123.0");
                 //chromeOptions.addArguments("start-maximized");
                 //chromeOptions.setExperimentalOption("excludeSwitches", Arrays.asList("disable-popup-blocking"));
                 return chromeOptions;
