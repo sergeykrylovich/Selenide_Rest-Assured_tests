@@ -94,7 +94,7 @@ public class SearchingTests {
                 .clickOnSearchingBtn()
                 .getNotFoundCourseMessage();
 
-        assertThat(message).contains(expectedSearchingQuery).contains("ничего не найдено");
+        assertThat(message).contains(expectedSearchingQuery).contains("ничего не найдено11");
     }
 
     @AfterEach
