@@ -15,6 +15,7 @@ import ui.pages.CoursePage;
 import ui.pages.MainPage;
 import ui.annotations.BrowserRunTypes;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -58,6 +59,7 @@ public class SearchingTests {
         assertThat(collect).anySatisfy(x -> x.contains("java"));
     }
 
+    @BrowserRunTypes(browser = CHROME, isRemote = false)
     @Test
     @Tag("UI")
     @Feature("searching course and open it")
@@ -73,7 +75,7 @@ public class SearchingTests {
                 .clickOnSearchingBtn()
                 .clickOnLinkByNumberInSearchingResult(1);
 
-        Selenide.switchTo().window(1);
+        Selenide.switchTo().window(1, Duration.ofSeconds(5));
         SelenideElement headerName = coursePage.getHeaderName();
         assertThat(headerName.getText()).containsIgnoringCase(expectedSearchingQuery);
     }

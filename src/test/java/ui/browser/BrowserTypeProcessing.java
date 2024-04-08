@@ -77,7 +77,7 @@ public class BrowserTypeProcessing implements BeforeAllCallback, BeforeEachCallb
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--disable-dev-shm-usage");
         chromeOptions.addArguments("--no-sandbox");
-        chromeOptions.addArguments("--headless");
+        //chromeOptions.addArguments("--headless");
         SelenideConfig selenideConfig = new SelenideConfig()
                 .browser(browser.name().toLowerCase())
                 .browserCapabilities(chromeOptions);

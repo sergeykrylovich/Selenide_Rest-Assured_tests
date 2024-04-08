@@ -44,6 +44,7 @@ dependencies {
     testImplementation("io.rest-assured:rest-assured:$restAssuredVer")
     testImplementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVer")
     testImplementation("commons-io:commons-io:2.15.1")
+    testImplementation("mysql:mysql-connector-java:8.0.33")
 
     implementation ("org.assertj:assertj-core:$assertJVer")
 }
