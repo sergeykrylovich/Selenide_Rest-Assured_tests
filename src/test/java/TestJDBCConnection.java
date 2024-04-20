@@ -2,7 +2,9 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.*;
 
+
 public class TestJDBCConnection {
+
 
     private static final String USER_NAME = "root";
     private static final String PASSWORD = "admin";
