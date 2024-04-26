@@ -13,7 +13,7 @@ public class ThreadSafeEntityManagerFactory implements EntityManagerFactory {
     private final EntityManagerFactory entityManagerFactory;
     private final ThreadLocal<EntityManager> entityManagerThreadLocal;
 
-    public ThreadSafeEntityManagerFactory(EntityManagerFactory entityManagerFactory, ThreadLocal<EntityManager> entityManagerThreadLocal) {
+    public ThreadSafeEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
         this.entityManagerThreadLocal = ThreadLocal.withInitial(entityManagerFactory::createEntityManager);
     }

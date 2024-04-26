@@ -22,7 +22,7 @@ public enum EmfContext {
         if (container.containsKey(connConfig))
             return container.get(connConfig);
         else {
-            log.warn("### Init EntityManagerFactory ###");
+            logger.warn("### Init EntityManagerFactory ###");
 
             //стандартные настройки от hibernate для подключения к БД
             Map<String, String> settings = new HashMap<>();
