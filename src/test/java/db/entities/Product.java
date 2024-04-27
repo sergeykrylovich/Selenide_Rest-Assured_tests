@@ -5,7 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "product")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) //само генерирует айди
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //само генерирует айди
     private Integer Id;
     @Version
     private Integer version;

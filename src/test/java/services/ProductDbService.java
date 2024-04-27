@@ -8,9 +8,9 @@ public class ProductDbService extends JpaService {
     public ProductDbService() {
         super(new EmfBuilder()
                 .mySql() //выбираем тип бд
-                .jdbcUrl("jdbc:mysql://localhost:3306/springbootdb") //ссылка на бд
+                .jdbcUrl("jdbc:mysql://localhost:3307/TESTDB") //ссылка на бд
                 .username("root") //логин бд
-                .password("ajuqy78iuhhjkkaj") //пароль бд
+                .password("admin") //пароль бд
                 .persistenceUnitName("test") //название persistence-unit из xml файла
                 .build() // билдим конфиг
                 .createEntityManager()); //создаем менеджер
