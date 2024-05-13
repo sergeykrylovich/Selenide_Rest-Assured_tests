@@ -33,6 +33,7 @@ public class BrowserTypeProcessing implements BeforeAllCallback, BeforeEachCallb
     public void beforeAll(ExtensionContext context) throws Exception {
         BrowserRunTypes classAnnotation = context.getRequiredTestClass().getAnnotation(BrowserRunTypes.class);
         context.getStore(space).put("classAnnotation", classAnnotation);
+
     }
 
     private Capabilities getBrowserCapabilities(Browsers browser) {
@@ -90,6 +91,7 @@ public class BrowserTypeProcessing implements BeforeAllCallback, BeforeEachCallb
     public void beforeEach(ExtensionContext context) throws Exception {
         BrowserRunTypes classAnnotation = context.getStore(space).get("classAnnotation", BrowserRunTypes.class);
         BrowserRunTypes methodAnnotation = context.getRequiredTestMethod().getAnnotation(BrowserRunTypes.class);
+
 
         if (methodAnnotation == null) {
             methodAnnotation = classAnnotation;

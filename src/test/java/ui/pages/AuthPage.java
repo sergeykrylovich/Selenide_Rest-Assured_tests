@@ -1,5 +1,6 @@
 package ui.pages;
 
+import api.pojo.AuthorizationData;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
@@ -18,6 +19,13 @@ public class AuthPage {
     public AuthPage fillEmailAndPassword(String email, String password) {
         emailInput.setValue(email);
         passwordInput.sendKeys(password);
+        return this;
+    }
+
+    @Step("Fill email and password in log in form by AuthData Instance")
+    public AuthPage fillEmailAndPassword(AuthorizationData authorizationData) {
+        emailInput.setValue(authorizationData.getEmail());
+        passwordInput.sendKeys(authorizationData.getPassword());
         return this;
     }
 

@@ -25,4 +25,14 @@ public class DBTests {
         System.out.println(actualProduct.getName());
         assertThat(actualProduct.getName()).isEqualTo(name);
     }
+
+    @Test
+    public void updateDB() {
+        String name = "Meat";
+        productDbService = new ProductDbService();
+        productDbService.updateProductName(3, name);
+        Product actualProduct = productDbService.getProductByName(name);
+        System.out.println(actualProduct.getName());
+        assertThat(actualProduct.getName()).isEqualTo(name);
+    }
 }

@@ -1,34 +1,40 @@
 package tests;
 
+import api.pojo.AuthorizationData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 
 
 import org.junit.jupiter.api.Test;
+import ui.annotations.InjectAuthDataAnnotation;
+import ui.annotations.InjectMainPageAnnotation;
 import ui.pages.MainPage;
 import ui.annotations.BrowserRunTypes;
+
+import javax.inject.Inject;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.*;
 
 
-@BrowserRunTypes
+@InjectMainPageAnnotation
+@BrowserRunTypes(browser = BrowserRunTypes.Browsers.CHROME, isRemote = false)
 public class AuthorizationTests {
 
+    @Inject
     protected MainPage mainPage;
     public static final String EMAIL = "gann.semmi@mail.ru";
     public static final String PASSWORD = "S12345678";
 
-    @BrowserRunTypes(browser = BrowserRunTypes.Browsers.CHROME, isRemote = true)
+
     @Test
     @Tag("Auth")
     @DisplayName("Authorization with login and password")
-    public void successfulTest() {
+    public void successfulTest(@InjectAuthDataAnnotation AuthorizationData authorizationData) {
 
-        mainPage = new MainPage();
         boolean isProfile = mainPage.openMainPage()
                 .clickOnLogIn()
-                .fillEmailAndPassword(EMAIL, PASSWORD)
+                .fillEmailAndPassword(authorizationData)
                 .submitCredentialsAndLogin()
                 .imgProfileIsExist();
 
