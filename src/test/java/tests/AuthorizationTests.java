@@ -6,8 +6,12 @@ import org.junit.jupiter.api.Tag;
 
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import ui.annotations.AuthDataConverter;
 import ui.annotations.InjectAuthDataAnnotation;
 import ui.annotations.InjectMainPageAnnotation;
+import ui.enums.AuthDataType;
 import ui.pages.MainPage;
 import ui.annotations.BrowserRunTypes;
 
@@ -31,6 +35,22 @@ public class AuthorizationTests {
     @Tag("Auth")
     @DisplayName("Authorization with login and password")
     public void successfulTest(@InjectAuthDataAnnotation AuthorizationData authorizationData) {
+
+        boolean isProfile = mainPage.openMainPage()
+                .clickOnLogIn()
+                .fillEmailAndPassword(authorizationData)
+                .submitCredentialsAndLogin()
+                .imgProfileIsExist();
+
+        assertThat(isProfile).isTrue();
+
+    }
+
+    @EnumSource(value = AuthDataType.class, names = {"VALID"})
+    @ParameterizedTest
+    @Tag("Auth")
+    @DisplayName("Authorization with login and password")
+    public void successfullyAuthTest(@AuthDataConverter AuthorizationData authorizationData) {
 
         boolean isProfile = mainPage.openMainPage()
                 .clickOnLogIn()
